@@ -48,6 +48,7 @@ const App = ({ signOut }) => {
     const data = {
       name: form.get("name"),
       description: form.get("description"),
+      price: form.get("price"),
       image: image.name,
     };
     if (!!data.image) await Storage.put(data.name, image);
@@ -92,12 +93,20 @@ const App = ({ signOut }) => {
             variation="quiet"
             required
           />
+          <TextField
+            name="price"
+            placeholder="Note Price"
+            label="Note Price"
+            labelHidden
+            variation="quiet"
+            required
+          />
           <View
-  name="image"
-  as="input"
-  type="file"
-  style={{ alignSelf: "end" }}
-/>
+            name="image"
+            as="input"
+            type="file"
+            style={{ alignSelf: "end" }}
+          />
           <Button type="submit" variation="primary">
             Create Note
           </Button>
@@ -106,32 +115,33 @@ const App = ({ signOut }) => {
       <Heading level={2}>Current Notes</Heading>
       <View margin="3rem 0">
       {notes.map((note) => (
-  <Flex
-    key={note.id || note.name}
-    direction="row"
-    justifyContent="center"
-    alignItems="center"
-  >
-    <Text as="strong" fontWeight={700}>
-      {note.name}
-    </Text>
-    <Text as="span">{note.description}</Text>
-    {note.image && (
-      <Image
-        src={note.image}
-        alt={`visual aid for ${notes.name}`}
-        style={{ width: 400 }}
-      />
-    )}
-    <Button variation="link" onClick={() => deleteNote(note)}>
-      Delete note
-    </Button>
-  </Flex>
+<Flex
+       direction="row"
+       key={note.id}
+       justifyContent="space-between"
+       alignItems="center"
+       margin="1rem 0"
+     >
+<View>
+<Heading level={3}>{note.name}</Heading>
+<Text>{note.description}</Text>
+<Text>Price: {note.price}</Text>
+{note.image && <Image src={note.image} alt={note.name} />}
+</View>
+<Button
+variation="primary"
+onClick={() => deleteNote({ id: note.id, name: note.name })}
+>
+Delete
+</Button>
+</Flex>
 ))}
-      </View>
-      <Button onClick={signOut}>Sign Out</Button>
-    </View>
-  );
-};
+</View>
+<Button variation="primary" onClick={signOut}>
+Sign out
+</Button>
+</View>
+);
+}
 
 export default withAuthenticator(App);
