@@ -106,6 +106,7 @@ const App = ({ signOut }) => {
             as="input"
             type="file"
             style={{ alignSelf: "end" }}
+
           />
           <Button type="submit" variation="primary">
             Create Note
@@ -114,34 +115,45 @@ const App = ({ signOut }) => {
       </View>
       <Heading level={2}>Current Notes</Heading>
       <View margin="3rem 0">
-      {notes.map((note) => (
-<Flex
-       direction="row"
-       key={note.id}
-       justifyContent="space-between"
-       alignItems="center"
-       margin="1rem 0"
-     >
-<View>
-<Heading level={3}>{note.name}</Heading>
-<Text>{note.description}</Text>
-<Text>Price: {note.price}</Text>
-{note.image && <Image src={note.image} alt={note.name} />}
-</View>
-<Button
-variation="primary"
-onClick={() => deleteNote({ id: note.id, name: note.name })}
->
-Delete
-</Button>
-</Flex>
-))}
-</View>
-<Button variation="primary" onClick={signOut}>
-Sign out
-</Button>
-</View>
+        {notes.map((note) => (
+          <Flex
+            key={note.id || note.name}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            margin="1rem 0"
+          >
+            {note.image && (
+              <Image
+                src={note.image}
+                alt={`Image for ${note.name}`}
+                objectFit="cover"
+                width="5rem"
+                height="5rem"
+              />
+            )}
+            <View>
+              <Text>{note.name}</Text>
+              <Text>{note.description}</Text>
+              <Text>${note.price}</Text>
+            </View>
+            <Button
+              variation="danger"
+              onClick={() => deleteNote({
+                id: note.id,
+                name: note.name
+              })}
+            >
+              Delete
+            </Button>
+          </Flex>
+        ))}
+      </View>
+      <Button variation="primary" onClick={signOut}>
+        Sign Out
+      </Button>
+    </View>
 );
-}
+};
 
-export default withAuthenticator(App);
+export default withAuthenticator(App);    
